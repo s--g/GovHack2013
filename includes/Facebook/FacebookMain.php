@@ -46,8 +46,10 @@ if ($user) {
 // Login or logout url will be needed depending on current user state.
 if ($user) {
   $logoutUrl = $facebook->getLogoutUrl();
+  //$facebook->destroySession();
 } else {
   $loginUrl = $facebook->getLoginUrl();
+
 }
 
 // This call will always work since we are fetching public data.
@@ -57,7 +59,7 @@ $naitik = $facebook->api('/naitik');
 <!doctype html>
 <html xmlns:fb="http://www.facebook.com/2008/fbml">
   <head>
-    <title>php-sdk</title>
+		<title>Facebook Login</title>
     <style>
       body {
         font-family: 'Lucida Grande', Verdana, Arial, sans-serif;
@@ -72,8 +74,9 @@ $naitik = $facebook->api('/naitik');
     </style>
   </head>
   <body>
+<!--    
     <h1>php-sdk</h1>
-
+-->
     <?php if ($user): ?>
       <a href="<?php echo $logoutUrl; ?>">Logout</a>
     <?php else: ?>
@@ -82,54 +85,59 @@ $naitik = $facebook->api('/naitik');
         <a href="<?php echo $loginUrl; ?>">Login with Facebook</a>
       </div>
     <?php endif ?>
-
-    <h3>PHP Session</h3>
-    <pre><?php print_r($_SESSION); ?></pre>
+    
+<!--
+<h3>PHP Session</h3>    
+<pre><?php print_r($_SESSION); ?></pre>
+-->
 
     <?php if ($user): ?>
-      <h3>You</h3>
+    <?php $user_profile = $facebook->api('/me'); ?>
+      <h3>Welcome <?php echo $user_profile["name"]; ?></h3>
       <img src="https://graph.facebook.com/<?php echo $user; ?>/picture">
-
+<!-- 
       <h3>Your User Object (/me)</h3>
       <pre><?php print_r($user_profile); ?></pre>
+-->
     <?php else: ?>
       <strong><em>You are not Connected.</em></strong>
     <?php endif ?>
-		<h3>Friend List</h3>
+
 		<?php
 	   	if ($user) {
-	        $user_profile = $facebook->api('/me');
-	        $friends = $facebook->api('/me/friends');
-	
+	        //My user Profile
+	        //$user_profile = $facebook->api('/me');
+	        
+	        //My user ID
+	        //echo '<pre>My ID: ' . $user_profile["id"] . '</pre>';
+	        
+	        //My friends
+	        //$friends = $facebook->api('/me/friends');
+
 	        echo '<ul>';
-	        foreach ($friends["data"] as $value) {
-	        	
-	            echo '<li>';
-	            echo '<div class="pic">';
-	            echo '<img src="https://graph.facebook.com/' . $value["id"] . '/picture"/>';
-	            echo '</div>';
-	            echo '<div class="picName">'.$value["name"].'</div>'; 
-	            echo '<div class="picName">'.$value["id"].'</div>'; 
-	            echo '</li>';
-	        		
-	        		$fql = 'SELECT uid, name, sex, email, contact_email from user where uid = ' . $value["id"];
-        			
-							$ret_obj = $facebook->api(array(
+
+	        $userId = $user_profile["id"];
+	        
+	        // get your list of friends
+					$fql = "SELECT uid, first_name, last_name FROM user "
+     						. "WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = $userId)";
+					$friends = $facebook->api(array(
                                    'method' => 'fql.query',
                                    'query' => $fql,
                                  ));
-			        // FQL queries return the results in an array, so we have
-		        	//  to get the friend's detail
-		        	echo '<pre>Name: ' . $ret_obj[0]['name'] . '</pre>';
-		        	echo '<pre>Gender: ' . $ret_obj[0]['sex'] . '</pre>';
-		        	echo '<pre>Email: ' . $ret_obj[0]['email'] . '</pre>';
-		        	echo '<pre>Contact: ' . $ret_obj[0]['contact_email'] . '</pre>';
-	        }
+				
+					// we should now have a list of friend infos with their details
+					//print_r($friends);
+					?>
+				  <h3>Friend List</h3>
+				  <?php
+					foreach ($friends as $value) {
+					echo '<pre> Name: ' . $value['first_name'] ." ". $value['last_name'].'</pre>';
+					echo '<img src="https://graph.facebook.com/' . $value['uid'] . '/picture"/>';
+					}
+
 	        echo '</ul>';
 	    }
     ?>
-    <h3>Public profile of Naitik</h3>
-    <img src="https://graph.facebook.com/naitik/picture">
-    <?php echo $naitik['name']; ?>
   </body>
 </html>
