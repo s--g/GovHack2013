@@ -26,7 +26,84 @@
 		}
     </style>
 	
+	<script type="text/javascript">
+	$(document).ready(function()
+	{
+		$('.person').hover(function()
+		{
+			 $(this).animate({
+				width: '+=10',
+				left: '-=5',
+				top: '-=5',
+				height: '+=10'
+				}, 200, function() {
+				// Animation complete.
+			});	
+			
+			 $(this).children().animate({
+				width: '+=5',
+				left: '+=5',
+				top: '-=0',
+				height: '+=5'
+				}, 200, function() {
+				// Animation complete.
+			});	
+			
+		},function()
+		{
+			 $(this).animate({
+				width: '-=10',
+				left: '+=5',
+				top: '+=5',
+				height: '-=10'
+				}, 400, function() {
+				// Animation complete.
+			});
+			
+			 $(this).children().animate({
+				width: '-=5',
+				left: '-=5',
+				top: '+=0',
+				height: '-=5'
+				}, 400, function() {
+				// Animation complete.
+			});
+			
+		}); 
+	});
+</script>
 
+<style type="text/css">
+.person
+{
+	position: relative; 
+	border-radius: 150px; 
+	background-color: #ff4; 
+	width: 180px; 
+	height: 180px; 
+	margin-left: 30px;
+	margin-bottom: 30px;
+	float: left;
+}
+
+.person img
+{
+	width: 90px; 
+	border-radius: 100px; 
+	position: relative; 
+	left: 46px; 
+	top: 10px;
+}
+
+.person div
+{
+	width: 180px;
+	text-align: center;
+	font-size: 28px;
+	color: black;
+	margin-top: 20px;
+}
+</style>
 
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
 

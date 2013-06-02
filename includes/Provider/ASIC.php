@@ -6,7 +6,7 @@ class Provider_ASIC
 	
 	public static function searchByFacebook($facebookFriend)
 	{
-		$fields = array('SearchString' => '%22'.urlencode($facebookFriend->getname()).'%22',
+		$fields = array('SearchString' => '%22'.urlencode($facebookFriend->getFirstName().' '.$facebookFriend->getSurname()).'%22',
 						'AmountSearchString' => null,
 						'Action' => 'Go');
 
@@ -39,12 +39,14 @@ class Provider_ASIC
 			$i++;
 			
 			$person = new FWB_Person();
+			$person->setFirstName($facebookFriend->getFirstName());
+			$person->setImageUrl($facebookFriend->getImageUrl());
 			
 			$pos = strpos($xml, '<td align="right" valign=top class="RecordTitle">', $pos + 50);
 			
 			// Name
-			preg_match('/(class="RecordTitle"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"> )(.*?)(<\/font><\/a>)/s', substr($xml, $pos), $matches);
-			$person->setName($matches[2]); //$facebookFriend->getName()); //
+			//preg_match('/(class="RecordTitle"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"> )(.*?)(<\/font><\/a>)/s', substr($xml, $pos), $matches);
+			//$person->setName($facebookFriend->getFirstName());
 
 			// Amount
 			preg_match('/(<font face="Verdana, Arial, Helvetica, sans-serif" size="2">\$)(.*?)(<\/font><\/p><\/td>)/s', substr($xml, $pos), $matches);
