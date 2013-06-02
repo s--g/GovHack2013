@@ -31,8 +31,22 @@ if ($user)
 
 include('includes/header.php');
 
+?>
+
+<div>
+		<p><h3 align="center">Hello Australia. Did you know there's <font color="#EAC117">$677M</font> in unclaimed money across the country? </h3></p>
+		<p><h3 align="center">We are here to help you to  find it, claim it and use it.</h3></p>
+	</div>
+	<div align="center" style="margin-top: 50px;">	
+		<img align="center" src="img/T=).png" />
+	</div>
+
+<?php	
+
 if (!$user): ?>
-	<a href="<?php echo($facebook->getLoginUrl()); ?>">Login with Facebook</a> <?php 
+	<div align="center"><a href="<?php echo($facebook->getLoginUrl(array(
+        "redirect_uri" => "http://localhost/GovHack2013/test.php"
+    ))); ?>"><img align="center" src="img/flogin.png" /></a></div> <?php 
 else:
 
 	if(!isset($_GET['action']))
