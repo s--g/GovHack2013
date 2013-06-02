@@ -31,7 +31,7 @@ if ($user)
 
 include('includes/header.php');
 
-?>
+if (!$user): ?>
 
 <div>
 		<p><h3 align="center">Hello Australia. Did you know there's <font color="#EAC117">$677M</font> in unclaimed money across the country? </h3></p>
@@ -40,13 +40,7 @@ include('includes/header.php');
 	<div align="center" style="margin-top: 50px;">	
 		<img align="center" src="img/T=).png" />
 	</div>
-
-<?php	
-
-if (!$user): ?>
-	<div align="center"><a href="<?php echo($facebook->getLoginUrl(array(
-        "redirect_uri" => "http://localhost/GovHack2013/test.php"
-    ))); ?>"><img align="center" src="img/flogin.png" /></a></div> <?php 
+	<div align="center"><a href="<?php echo($facebook->getLoginUrl()); ?>"><img align="center" src="img/flogin.png" /></a></div> <?php 
 else:
 
 	if(!isset($_GET['action']))
@@ -60,14 +54,7 @@ else:
 			. "WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = $userId)";
 	$friends = $facebook->api(array('method' => 'fql.query', 'query' => $fql)); ?>
 
-	<div class="span8 offset2" style="margin-top: 50px; margin-bottom: 20px; text-align: center;">
-		<img src="img/congrats.png" style="height: 90px;" />
-		<p>&nbsp;</p>
-		<p style="font-size: 28pt;"><?php echo $user_profile["name"]; ?>.  You have:</p>
-		<p style="font-size: 170pt; line-height: 200px; font-weight: bold; color: #ff0;" id="number-of-friends">&nbsp;</p>
-		<p style="font-size: 28pt;">friends with benefits!</p>
-	</div>
-
+	<?php ob_start(); ?>
 	<div style="width: 100%; padding-top: 100px;">
 
 		<table style="margin: auto;">
@@ -123,10 +110,31 @@ else:
 			</tr>
 		</table>
 		
-	</div> 
-	<script type="text/javascript">
-		$(document).ready(function() { $('#number-of-friends').html('<?php echo($i); ?>'); });
-	</script> <?php
+	</div> <?php
+	
+	$out1 = ob_get_contents();
+	ob_end_clean();
+		
+	if($i == 0): ?>
+		<div class="span8 offset2" style="margin-top: 50px; margin-bottom: 20px; text-align: center;">
+			<h1>Oh no!</h1>
+			<p>&nbsp;</p>
+			<p style="font-size: 28pt;">You have no friends with benefits.</p>
+			<p style="font-size: 170pt; line-height: 200px; font-weight: bold; color: #ff0;" id="number-of-friends">:(</p>
+		</div>	<?php 
+		
+		echo($out1);
+	 else: ?>
+		<div class="span8 offset2" style="margin-top: 50px; margin-bottom: 20px; text-align: center;">
+			<img src="img/congrats.png" style="height: 90px;" />
+			<p>&nbsp;</p>
+			<p style="font-size: 28pt;"><?php echo $user_profile["name"]; ?>.  You have:</p>
+			<p style="font-size: 170pt; line-height: 200px; font-weight: bold; color: #ff0;" id="number-of-friends"><?php echo($i); ?></p>
+			<p style="font-size: 28pt;">friends with benefits!</p>
+		</div> <?php	
+		
+		echo($out1); 
+	endif;
 
 endif;
 include('includes/footer.php');
