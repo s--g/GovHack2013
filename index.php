@@ -3,7 +3,7 @@
 set_include_path(get_include_path().PATH_SEPARATOR.dirname(__FILE__).DIRECTORY_SEPARATOR.'includes');
 
 require('includes/Facebook/src/facebook.php');
-include('Provider/ASIC.php');
+include('Provider/DTF.php');
 include('Facebook/Friend.php');
 include('FWB/Person.php');
 
@@ -35,6 +35,9 @@ if (!$user): ?>
 	<a href="<?php echo($facebook->getLoginUrl()); ?>">Login with Facebook</a> <?php 
 else:
 
+	if(!isset($_GET['action']))
+		header('Location: find-money.php');
+		
 	$user_profile = $facebook->api('/me');
 	$userId = $user_profile["id"];
 
@@ -68,7 +71,7 @@ else:
 						$facebookFriend->setSurname($value['last_name']);
 						$facebookFriend->setImageUrl('https://graph.facebook.com/'.$value['uid'].'/picture');
 			
-						$people = Provider_ASIC::searchByFacebook($facebookFriend);
+						$people = Provider_DTF::searchByFacebook($facebookFriend);
 			
 						if(empty($people))
 							continue;
