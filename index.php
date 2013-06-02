@@ -34,8 +34,8 @@ include('includes/header.php');
 if (!$user): ?>
 
 <div>
-		<p><h3 align="center">Hello Australia. Did you know there's <font color="#EAC117">$677M</font> in unclaimed money across the country? </h3></p>
-		<p><h3 align="center">We are here to help you to  find it, claim it and use it.</h3></p>
+		<p><h3 align="center"><font color="#419DCE">Hello Australia. Did you know there's </font><font color="#CB345E">$677M</font><font color="#419DCE"> in unclaimed money across the country?</font></h3></p>
+		<p><h3 align="center"><font color="#419DCE">We are here to help you to</font><font color="#CB345E"> find it, claim it and use it.</font></h3></p>
 	</div>
 	<div align="center" style="margin-top: 50px;">	
 		<img align="center" src="img/T=).png" />
