@@ -16,8 +16,8 @@
     <script src="js/bootstrap-collapse.js"></script>
     <script src="js/bootstrap-carousel.js"></script>
     <script src="js/bootstrap-typeahead.js"></script> -->
-	<div style="position: absolute; bottom: 0;">
-		<h4>By Team Smiley <img src="img/teamlogo2.png" /></h4>
+	<div align="center" style="margin-top: 70px;">
+		<h4>By Team Smiley <img src="img/teamlogo.png" /></h4>
 	</div>
   </body>
 </html>
